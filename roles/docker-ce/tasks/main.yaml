@@ -1,0 +1,52 @@
+---
+- name: Uninstall old versions of Docker
+  apt:
+    name: "{{ item }}"
+    state: absent
+  loop:
+    - docker
+    - docker-engine
+    - docker.io
+
+# install using the repository
+- name:  Update apt packages
+  apt:
+    update_cahce: yes
+
+- name: install repository softs
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common
+
+- name: add docker's official GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: add docker apt repository
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable
+    state: present
+
+- name: install docker-ce
+  apt:
+    update_cache: yes
+    name: docker-ce=18.03.0~ce-0~ubuntu
+
+# Step: mkdir {{docker_root_dir}} on the host.
+- name: make a dir for  docker root dir
+  command: mkdir -p /data/docker
+
+# # Step: copying daemon.json.
+- name: copy docker daemon.josn
+  template:
+      dest: /etc/docker/daemon.json 
+      src: templates/docker/daemon.json.jinja2
+
+
+# # Step: copying docker package.

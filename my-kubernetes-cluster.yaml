@@ -1,0 +1,14 @@
+- hosts: kubernetes
+  gather_facts: no
+  roles:
+    - docker-ce
+
+- hosts: master
+  gather_facts: no
+  roles:
+    - kubernetes-master
+
+- hosts: node
+  gather_facts: no 
+  roles:
+    - kubernetes-node

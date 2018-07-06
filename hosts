@@ -1,0 +1,15 @@
+all:
+  children:
+    kubernetes:
+      children:
+        master:
+          hosts:
+            172.16.0.101: 
+              ansible_host: 172.16.0.101
+            172.16.0.102:
+              ansible_host: 172.16.0.102
+            172.16.0.103:
+              ansible_host: 172.16.0.103    
+          vars:
+            ansible_user: root
+        node:
