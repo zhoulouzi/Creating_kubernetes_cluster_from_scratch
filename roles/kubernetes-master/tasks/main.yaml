@@ -2,42 +2,42 @@
 
 - name: create basic directory
   file:
-    path: {{ item }}
+    path: "{{ item }}"
     state: directory
     mode: 0755
-    loop:
-      - {{ CLUSTER_DATA_PATH }}
-      - {{ CLUSTER_DATA_PATH }}/certs/
-      - {{ CLUSTER_DATA_PATH }}/etcd/
-      - {{ CLUSTER_DATA_PATH }}/kubelet/
-      - {{ CLUSTER_DATA_PATH }}/kube-proxy/
-      - {{ CLUSTER_DATA_PATH }}/kubelet/manifests/
+  loop:
+    - "{{ CLUSTER_DATA_PATH }}"
+    - "{{ CLUSTER_DATA_PATH }}/certs/"
+    - "{{ CLUSTER_DATA_PATH }}/etcd/"
+    - "{{ CLUSTER_DATA_PATH }}/kubelet/"
+    - "{{ CLUSTER_DATA_PATH }}/kube-proxy/"
+    - "{{ CLUSTER_DATA_PATH }}/kubelet/manifests/"
 
 - name: add apiserever hostname into hosts
   lineinfile:
     dest: /etc/hosts
     line: "{{ hostvars[item].ansible_host }} {{ CLUSTER_API_HOSTNAME }}"
     state: present
-    loop: {{ groups["master"]}}
+  loop: "{{ groups['master'] }}"
       
 
 - name: copy tls keys 
   copy:
-    src: ./cfssl_certs/{{ item.filename }}
-    dest: {{ CLUSTER_DATA_PATH }}/{{ item.destpath }}
+    src: "./cfssl_certs/{{ item.filename }}"
+    dest: "{{ CLUSTER_DATA_PATH }}/{{ item.destpath }}"
     owner: root
     group: root
-    mode: {{ item.mode }}
-    loop:
-      - { filename: 'ca.pem', destpath: 'certs/ca.pem', mode: '0644'}
-      - { filename: 'ca-key.pem', destpath: 'certs/ca-key.pem', mode: '0600'}
-      - { filename: 'api-server.pem', destpath: 'certs/api-server.pem', mode: '0644'}
-      - { filename: 'api-server-key.pem', destpath: 'certs/api-server-key.pem', mode: '0600'}
-      - { filename: 'token-auth-file', destpath: 'certs/token-auth-file', mode: '0644'}
+    mode: "{{ item.mode }}"
+  loop:
+    - { filename: 'ca.pem', destpath: 'certs/ca.pem', mode: '0644'}
+    - { filename: 'ca-key.pem', destpath: 'certs/ca-key.pem', mode: '0600'}
+    - { filename: 'api-server.pem', destpath: 'certs/api-server.pem', mode: '0644'}
+    - { filename: 'api-server-key.pem', destpath: 'certs/api-server-key.pem', mode: '0600'}
+    - { filename: 'token-auth-file', destpath: 'certs/token-auth-file', mode: '0644'}
 
 - name: copy ca cert to the host additiinal CA Certs
   copy:
-    src: {{ CLUSTER_DATA_PATH }}/certs/ca.pem
+    src: "{{ CLUSTER_DATA_PATH }}/certs/ca.pem" 
     dest: /usr/local/share/ca-certificates/ca.pem
     remote_src: yes
   notify:
@@ -53,8 +53,8 @@
 
 - name: copy kubelet kubeconfig
   copy: 
-    src: ./kubeconfig/kubelet.kubeconfig
-    dest: {{ CLUSTER_DATA_PATH }}/kubelet/kubeconfig
+    src: ./kubeconfig/kubelet-bootstrap.kubeconfig
+    dest: "{{ CLUSTER_DATA_PATH }}/kubelet/kubelet-bootstrap.kubeconfig"
     owner: root
     group: root
     mode: 0600
@@ -77,7 +77,7 @@
 - name: copy kube-proxy kubeconfig
   copy: 
     src: ./kubeconfig/kube-proxy.kubeconfig
-    dest: {{ CLUSTER_DATA_PATH }}/kube-proxy/kubeconfig
+    dest: "{{ CLUSTER_DATA_PATH }}/kube-proxy/kubeconfig" 
     owner: root
     group: root
     mode: 0600

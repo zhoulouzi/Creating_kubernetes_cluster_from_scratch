@@ -9,7 +9,7 @@
   roles:
     - kubernetes-master
 
-- hosts: node
-  gather_facts: no 
-  roles:
-    - kubernetes-node
+# - hosts: node
+#   gather_facts: no 
+#   roles:
+#     - kubernetes-node

@@ -6,7 +6,7 @@ After=network.target
 [Service]
 ExecStart=/usr/local/bin/kubelet \
             --bootstrap-kubeconfig={{ KUBELET_BOOTSTRAPPING_KUBECONFIG_PATH }}  \
-            --kubeconfig= {{ KUBELET_KUBECONFIG_PATH }} \
+            --kubeconfig={{ KUBELET_KUBECONFIG_PATH }} \
             --cert-dir={{ CLUSTER_DATA_PATH }}/certs/
             --pod-manifest-path={{ KUBELET_POD_MANIFEST_PATH }} \
             --cluster-dns=10.96.0.10 \

@@ -26,7 +26,7 @@ KUBEPROXY_KUBECONFIG_PATH=$CLUSTER_DATA_PATH/kube-proxy/kubeconfig
 CERTS_DIR=./cfssl_certs
 CA_CERT=$CERTS_DIR/ca.pem
 CA_KEY=$CERTS_DIR/ca-key.pem
-CA_CONFIG=./cfssl_templates/ca_config.json
+CA_CONFIG=./cfssl_config/ca_config.json
 KUBECONFIG_DIR=./kubeconfig
 ######################### end
 
@@ -41,6 +41,7 @@ else
 fi
 
 ############## start gen tls key pair
+mkdir -p $CERTS_DIR
 # about ca
 ## ca key pair generate
 if [  -e $CA_CERT  ] && [ -e $CA_KEY ]; then
@@ -121,12 +122,13 @@ $KUBECTL_BIN config use-context ${CLUSTER_NAME}_kubelet-bootstrap --kubeconfig=$
 
 # handle vars on ./roles/kubernetes-master/vars/main.yaml.
 
-sed "s/{{CLUSTER_NAME}}/$CLUSTER_NAME/g; \
-    s/{{CLUSTER_CIDR}}/$CLUSTER_CIDR/g; \
-    s/{{CLUSTER_DATA_PATH}}/$CLUSTER_DATA_PATH/g; \
-    s/{{CLUSTER_API_HOSTNAME}}/$CLUSTER_API_HOSTNAME/g; \
-    s/{{KUBELET_POD_MANIFEST_PATH}}/$KUBELET_POD_MANIFEST_PATH/g; \
-    s/{{KUBELET_KUBECONFIG_PATH}}/$KUBELET_KUBECONFIG_PATH/g; \
-    s/{{KUBEPROXY_KUBECONFIG_PATH}}/$KUBEPROXY_KUBECONFIG_PATH/g;" \
-    ./role/kubernetes-master/vars/main.yaml.template > ./role/kubernetes-master/vars/main.yaml
+sed "s@{{CLUSTER_NAME}}@$CLUSTER_NAME@g; \
+    s@{{CLUSTER_CIDR}}@$CLUSTER_CIDR@g; \
+    s@{{CLUSTER_DATA_PATH}}@$CLUSTER_DATA_PATH@g; \
+    s@{{CLUSTER_API_HOSTNAME}}@$CLUSTER_API_HOSTNAME@g; \
+    s@{{KUBELET_POD_MANIFEST_PATH}}@$KUBELET_POD_MANIFEST_PATH@g; \
+    s@{{KUBELET_KUBECONFIG_PATH}}@$KUBELET_KUBECONFIG_PATH@g; \
+    s@{{KUBELET_BOOTSTRAPPING_KUBECONFIG_PATH}}@$KUBELET_BOOTSTRAPPING_KUBECONFIG_PATH@g; \
+    s@{{KUBEPROXY_KUBECONFIG_PATH}}@$KUBEPROXY_KUBECONFIG_PATH@g;" \
+    ./roles/kubernetes-master/vars/main.yaml.template > ./roles/kubernetes-master/vars/main.yaml
 
