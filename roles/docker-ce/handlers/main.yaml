@@ -1,16 +1,16 @@
 ---
-- name: Start docker 
+- name: start docker 
   systemd:
     state: started
     name: docker
     enabled: yes
 
-- name: Reload docker
+- name: reload docker
   systemd:
     state: reloaded
     name: docker
 
-- name: Restart docker
+- name: restart docker
   systemd:
     state: restarted
     name: docker

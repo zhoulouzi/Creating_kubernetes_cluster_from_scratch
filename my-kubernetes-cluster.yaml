@@ -1,6 +1,7 @@
 - hosts: kubernetes
   gather_facts: no
   roles:
+    - system-config
     - docker-ce
 
 - hosts: master

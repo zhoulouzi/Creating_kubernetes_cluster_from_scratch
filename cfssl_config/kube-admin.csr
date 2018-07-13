@@ -1,0 +1,16 @@
+{
+  "CN": "kube-admin",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+        {
+            "C": "CN",
+            "L": "BJ",
+            "ST": "BJ",
+            "OU": "kubernetes",
+            "O": "system:masters"
+        }
+    ]
+}

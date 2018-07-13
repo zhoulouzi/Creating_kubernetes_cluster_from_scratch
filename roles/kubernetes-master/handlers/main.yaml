@@ -1,0 +1,28 @@
+---
+- name: update ca certificates
+  command: update-ca-certificates
+  
+- name: start kubelet
+  systemd:
+    state: started
+    name: kubelet
+    daemon_reload: yes
+    enabled: yes
+
+- name: start kube-proxy
+  systemd:
+    state: started
+    name: kube-proxy
+    daemon_reload: yes
+    enabled: yes
+
+- name: restart kubelet
+  systemd:
+    state: restarted
+    name: kubelet
+
+- name: restart kube-proxy
+  systemd:
+    state: restarted
+    name: kube-proxy
+

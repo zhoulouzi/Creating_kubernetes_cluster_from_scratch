@@ -1,0 +1,34 @@
+---
+- name: build hosts file
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '{{ hostvars[item].ansible_host }}.*{{ item }}$'
+    line: "{{ hostvars[item].ansible_host }} {{item}}"
+    state: present
+  loop: '{{ groups["all"] }}'
+
+- name: turn off swap
+  shell: "swapoff -a"
+
+- name: handle swap in /etc/fstab
+  lineinfile:
+    path: /etc/fstab
+    regexp: swap
+    state: absent
+
+- name: install packages
+  apt:
+    update_cache: yes
+    name: "{{ item }}"
+    state: present
+  loop:
+    - conntrack
+    - socat
+
+- sysctl:
+    name: net.ipv4.ip_forward
+    sysctl_file: /etc/sysctl.conf
+    value: 1
+    reload: yes
+    sysctl_set: yes
+    state: present 

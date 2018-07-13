@@ -1,0 +1,18 @@
+[Unit]
+Description=Kubernetes Kube-porxy Server
+Documentation=https://github.com/kubernetes/kubernetes
+
+[Service]
+ExecStart=/usr/local/bin/kube-proxy \
+            --proxy-mode=ipvs \
+            --master=https://{{ CLUSTER_API_HOSTNAME }}:6443 \
+            --hostname-override={{ inventory_hostname }}  \
+            --kubeconfig={{ KUBEPROXY_KUBECONFIG_PATH }}  \
+            --cluster-cidr={{ CLUSTER_CIDR }}
+Restart=always
+RestartSec=5s
+StartLimitInterval=0
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
