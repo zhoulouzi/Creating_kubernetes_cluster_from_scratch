@@ -1,0 +1,20 @@
+[Unit]
+Description=Kubernetes Kubelet Server
+Documentation=https://github.com/kubernetes/kubernetes
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/kubelet \
+            --kubeconfig={{ KUBELET_KUBECONFIG_PATH }} \
+            --pod-manifest-path={{ KUBELET_POD_MANIFEST_PATH }} \
+            --cluster-dns=10.96.0.10 \
+            --hostname-override={{ inventory_hostname }} \
+            --node-ip={{ ansible_host }} \
+            --network-plugin=cni
+Restart=always
+RestartSec=5s
+StartLimitInterval=0
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target

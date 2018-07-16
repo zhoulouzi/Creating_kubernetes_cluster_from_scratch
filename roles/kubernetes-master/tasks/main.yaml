@@ -43,6 +43,16 @@
   notify:
     - update ca certificates
 
+- name: copy master manifests file
+  template:
+    src: "templates/{{item.filename}}"
+    dest: "{{ CLUSTER_DATA_PATH }}/{{item.destpath}}"
+  loop:
+    - {filename: 'master-component/etcd.yaml.template', destpath: 'kubelet/manifests/etcd.yaml'}
+    - {filename: 'master-component/kube-apiserver.yaml.template', destpath: 'kubelet/manifests/kube-apiserver.yaml'}
+    - {filename: 'master-component/kube-controller.yaml.template', destpath: 'kubelet/manifests/kube-controller.yaml'}
+    - {filename: 'master-component/kube-scheduler.yaml.template', destpath: 'kubelet/manifests/kube-scheduler.yaml'}
+
 - name: copy kubelet binary
   copy:
     src: ./binaries/kubelet
@@ -51,6 +61,7 @@
     group: root
     mode: 0750
 
+# master kubelet
 - name: copy kubelet kubeconfig
   copy: 
     src: ./kubeconfig/kubelet-bootstrap.kubeconfig
@@ -58,6 +69,7 @@
     owner: root
     group: root
     mode: 0600
+#TODO node kubelet
 
 - name: copy kubelet systemd config
   template:

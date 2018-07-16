@@ -9,6 +9,7 @@ CLUSTER_NAME=my-kubernetes-cluster
 CLUSTER_API_HOSTNAME=apisever.kubernetes.test
 CLUSTER_CIDR=10.0.0.0/16
 CLUSTER_DATA_PATH=/data/kubernetes
+CLUSTER_MASTER_LIST=("master1.kubernetes.test" "master2.kubernetes.test" "master3.kubernetes.test")
 
 # docker config vars:
 DOCKER_DATA_ROOT_DIR=/data/docker
@@ -86,8 +87,18 @@ else
 fi
 
 # about kubelet
-# kubelet tls bootstrapping
-# accroding to the pages on kubernetes docs.  ##https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet-tls-bootstrapping/
+## master kubelet key pair generate
+for i in "${CLUSTER_MASTER_LIST[@]}"; do
+    if [ -e $Certs_Dir/kubelet-$i.pem ] && [ -e $Certs_Dir/kubelet-$i-key.pem ];then
+        echo "Node $i's key pair has already been generate "
+    else
+        sed "s/{{HOSTNAME}}/$i/g" ./cfssl_config/kubelet.csr.template > ./cfssl_config/kubelet-$i.csr
+        $CFSSL_BIN gencert -ca=$CA_CERT -ca-key=$CA_KEY --config=$CA_CONFIG -profile=kubernetes ./cfssl_config/kubelet-$i.csr | $CFSSLJSON_BIN -bare $CERTS_DIR/kubelet-$i
+    fi
+done
+
+## kubelet tls bootstrapping
+### accroding to the pages on kubernetes docs.  ##https://kubernetes.io/docs/reference/command-line-tools-reference/kubelet-tls-bootstrapping/
 BOOTSTRAPPING_TOKEN=`head -c 16 /dev/urandom | od -An -t x | tr -d ' '`
 if [ -e token-auth-file ] ; then
     echo "The token-auth-file has already been generated."
@@ -109,6 +120,14 @@ $KUBECTL_BIN config set-cluster ${CLUSTER_NAME} --certificate-authority=$CA_CERT
 $KUBECTL_BIN config set-credentials kube-admin --client-certificate=$CERTS_DIR/kube-admin.pem --client-key=$CERTS_DIR/kube-admin-key.pem --embed-certs=true --kubeconfig=$KUBECONFIG_DIR/kube-admin.kubeconfig
 $KUBECTL_BIN config set-context ${CLUSTER_NAME}_kube-admin --cluster=${CLUSTER_NAME} --user=kube-admin --kubeconfig=$KUBECONFIG_DIR/kube-admin.kubeconfig
 $KUBECTL_BIN config use-context ${CLUSTER_NAME}_kube-admin --kubeconfig=$KUBECONFIG_DIR/kube-admin.kubeconfig
+
+#TODO kubeconfig for kubelet (master, do not use tls bootstrapping)
+for i in "${CLUSTER_MASTER_LIST[@]}"; do
+$KUBECTL_BIN config set-cluster ${CLUSTER_NAME} --certificate-authority=$CA_CERT --embed-certs=true --server=https://${CLUSTER_API_HOSTNAME}:6443 --kubeconfig=$KUBECONFIG_DIR/kubelet-$i.kubeconfig
+$KUBECTL_BIN config set-credentials kubelet --client-certificate=$CERTS_DIR/kubelet-$i.pem --client-key=$CERTS_DIR/kubelet-$i-key.pem --embed-certs=true --kubeconfig=$KUBECONFIG_DIR/kubelet-$i.kubeconfig
+$KUBECTL_BIN config set-context ${CLUSTER_NAME}_kubelet --cluster=${CLUSTER_NAME} --user=kubelet --kubeconfig=$KUBECONFIG_DIR/kubelet-$i.kubeconfig
+$KUBECTL_BIN config use-context ${CLUSTER_NAME}_kubelet --kubeconfig=$KUBECONFIG_DIR/kubelet-$i.kubeconfig
+done
 
 # kubeconfig for kubelet (TLS bootstrapping)
 $KUBECTL_BIN config set-cluster ${CLUSTER_NAME} --certificate-authority=$CA_CERT --embed-certs=true --server=https://${CLUSTER_API_HOSTNAME}:6443 --kubeconfig=$KUBECONFIG_DIR/kubelet-bootstrap.kubeconfig
