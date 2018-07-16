@@ -139,7 +139,7 @@ $KUBECTL_BIN config use-context ${CLUSTER_NAME}_kubelet-bootstrap --kubeconfig=$
 
 # start prepare ansible vars.
 
-# handle vars on ./roles/kubernetes-master/vars/main.yaml.
+# handle vars on ./roles/kubernetes/vars/main.yaml.
 
 sed "s@{{CLUSTER_NAME}}@$CLUSTER_NAME@g; \
     s@{{CLUSTER_CIDR}}@$CLUSTER_CIDR@g; \
@@ -149,5 +149,5 @@ sed "s@{{CLUSTER_NAME}}@$CLUSTER_NAME@g; \
     s@{{KUBELET_KUBECONFIG_PATH}}@$KUBELET_KUBECONFIG_PATH@g; \
     s@{{KUBELET_BOOTSTRAPPING_KUBECONFIG_PATH}}@$KUBELET_BOOTSTRAPPING_KUBECONFIG_PATH@g; \
     s@{{KUBEPROXY_KUBECONFIG_PATH}}@$KUBEPROXY_KUBECONFIG_PATH@g;" \
-    ./roles/kubernetes-master/vars/main.yaml.template > ./roles/kubernetes-master/vars/main.yaml
+    ./roles/kubernetes/vars/main.yaml.template > ./roles/kubernetes/vars/main.yaml
 
