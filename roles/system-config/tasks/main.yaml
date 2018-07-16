@@ -23,7 +23,11 @@
     state: present
   loop:
     - conntrack
+    # for kubectl port-fowaridng
     - socat
+    # for kube-proxy ipvs
+    - ipset
+    - ipvsadm
 
 - sysctl:
     name: net.ipv4.ip_forward
