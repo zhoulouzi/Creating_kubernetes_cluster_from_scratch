@@ -4,7 +4,7 @@ metadata:
   name: kube-controller-manager
   namespace: kube-system
   annotations:
-    scheduler.alpha.kubernetes.io/critical-pod: "",
+    scheduler.alpha.kubernetes.io/critical-pod: ""
     seccomp.security.alpha.kubernetes.io/pod: docker/default
   labels:
     component: kube-controller-manager
@@ -14,7 +14,7 @@ spec:
   - command:
     - kube-controller-manager
     - --cluster-cidr={{ CLUSTER_CIDR }}
-    - --root-ca-file=/srv/kubernetes/ca.crt
+    - --root-ca-file=/srv/kubernetes/ca.pem
     - --service-account-private-key-file=/srv/kubernetes/api-server-key.pem
     - --master=127.0.0.1:8080
     - --cluster-signing-cert-file=/srv/kubernetes/ca.pem

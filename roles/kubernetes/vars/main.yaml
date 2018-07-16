@@ -1,0 +1,12 @@
+---
+# cluster level vars:
+CLUSTER_NAME: my-kubernetes-cluster
+CLUSTER_CIDR: 10.0.0.0/16
+CLUSTER_DATA_PATH: /data/kubernetes
+CLUSTER_API_HOSTNAME: apisever.kubernetes.test
+# kubelet config vars:
+KUBELET_POD_MANIFEST_PATH: /data/kubernetes/kubelet/manifests/
+KUBELET_KUBECONFIG_PATH: /data/kubernetes/kubelet/kubeconfig
+KUBELET_BOOTSTRAPPING_KUBECONFIG_PATH: /data/kubernetes/kubelet/kubelet-bootstrap.kubeconfig
+# kube-proxy config vars
+KUBEPROXY_KUBECONFIG_PATH: /data/kubernetes/kube-proxy/kubeconfig

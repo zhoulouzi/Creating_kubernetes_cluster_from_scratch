@@ -4,7 +4,7 @@ metadata:
   name: kube-scheduler
   namespace: kube-system
   anotations:
-    scheduler.alpha.kubernetes.io/critical-pod: "",
+    scheduler.alpha.kubernetes.io/critical-pod: ""
     seccomp.security.alpha.kubernetes.io/pod: docker/default
   labels:
     tier: control-plane

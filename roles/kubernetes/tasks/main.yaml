@@ -21,7 +21,7 @@
   loop: "{{ groups['master'] }}"
       
 
-- name: copy tls keys 
+- name: copy ca keys 
   copy:
     src: "./cfssl_certs/{{ item.filename }}"
     dest: "{{ CLUSTER_DATA_PATH }}/{{ item.destpath }}"
@@ -31,10 +31,20 @@
   loop:
     - { filename: 'ca.pem', destpath: 'certs/ca.pem', mode: '0644'}
     - { filename: 'ca-key.pem', destpath: 'certs/ca-key.pem', mode: '0600'}
+
+- name: copy keys and secret file about master
+  copy:
+    src: "./cfssl_certs/{{ item.filename }}"
+    dest: "{{ CLUSTER_DATA_PATH }}/{{ item.destpath }}"
+    owner: root
+    group: root
+    mode: "{{ item.mode }}"
+  loop:
     - { filename: 'api-server.pem', destpath: 'certs/api-server.pem', mode: '0644'}
     - { filename: 'api-server-key.pem', destpath: 'certs/api-server-key.pem', mode: '0600'}
     - { filename: 'token-auth-file', destpath: 'certs/token-auth-file', mode: '0644'}
-
+  when: inventory_hostname in groups['master']
+  
 - name: copy ca cert to the host additiinal CA Certs
   copy:
     src: "{{ CLUSTER_DATA_PATH }}/certs/ca.pem" 
@@ -52,6 +62,7 @@
     - {filename: 'master-component/kube-apiserver.yaml.template', destpath: 'kubelet/manifests/kube-apiserver.yaml'}
     - {filename: 'master-component/kube-controller.yaml.template', destpath: 'kubelet/manifests/kube-controller.yaml'}
     - {filename: 'master-component/kube-scheduler.yaml.template', destpath: 'kubelet/manifests/kube-scheduler.yaml'}
+  when: inventory_hostname in groups['master']
 
 - name: copy kubelet binary
   copy:
@@ -64,19 +75,38 @@
 # master kubelet
 - name: copy kubelet kubeconfig
   copy: 
+    src: ./kubeconfig/kubelet-{{inventory_hostname}}.kubeconfig
+    dest: "{{ CLUSTER_DATA_PATH }}/kubelet/kubeconfig"
+    owner: root
+    group: root
+    mode: 0600
+  when: inventory_hostname in groups['master']
+# node kubelet
+- name: copy kubelet kubeconfig
+  copy: 
     src: ./kubeconfig/kubelet-bootstrap.kubeconfig
     dest: "{{ CLUSTER_DATA_PATH }}/kubelet/kubelet-bootstrap.kubeconfig"
     owner: root
     group: root
     mode: 0600
-#TODO node kubelet
+  when: inventory_hostname in groups['node']
 
+# master kubelet systemd config
 - name: copy kubelet systemd config
   template:
-      dest: /lib/systemd/system/kubelet.service 
+      dest: /lib/systemd/system/kubelet.service
+      src: templates/kubelet/kubelet.systemd.template-master
+  notify:
+    - start kubelet
+  when: inventory_hostname in groups['master']
+# node kublet systemd config
+- name: copy kubelet systemd config
+  template:
+      dest: /lib/systemd/system/kubelet.service
       src: templates/kubelet/kubelet.systemd.template
   notify:
     - start kubelet
+  when: inventory_hostname in groups['node']
 
 - name: copy kube-proxy binary
   copy:

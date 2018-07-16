@@ -10,7 +10,8 @@ spec:
     - --allow-privileged=true
     - --bind-address={{ ansible_host }}
     - --service-cluster-ip-range=10.96.0.0/12
-    - --etcd-servers={% for host in groups[master] %}{{hostvars[host]['inventory_hostname_short']}}=http://{{ ansible_host }}:2380{% if not loop.last %},{% endif %}{% endfor %}
+    - --etcd-servers={% for host in groups['master'] %}http://{{ hostvars[host]['ansible_host'] }}:2379{% if not loop.last %},{% endif %}{% endfor %}
+
     - --client-ca-file=/srv/kubernetes/ca.pem
     - --tls-cert-file=/srv/kubernetes/api-server.pem
     - --tls-private-key-file=/srv/kubernetes/api-server-key.pem
