@@ -36,3 +36,12 @@
     reload: yes
     sysctl_set: yes
     state: present 
+
+# configuring conntrack for calico. https://docs.projectcalico.org/v3.1/usage/configuration/conntrack
+- sysctl:
+    name: net.netfilter.nf_conntrack_max
+    sysctl_file: /etc/sysctl.conf 
+    value: 1000000
+    reload: yes 
+    sysctl_set: yes
+    state: present
