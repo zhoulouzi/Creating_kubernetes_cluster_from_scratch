@@ -1,0 +1,13 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: echoserver
+  annotations:
+spec:
+  rules:
+  - host: echoserver.test.com
+    http:
+      paths:
+      - backend:
+          serviceName: echoserver 
+          servicePort: 80

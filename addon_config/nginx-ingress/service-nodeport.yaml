@@ -1,0 +1,25 @@
+# service (Specify the value of nodeport)
+# https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/provider/baremetal/service-nodeport.yaml
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingress-nginx
+  namespace: ingress-nginx
+spec:
+  externalTrafficPolicy: Local
+  type: NodePort
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+    protocol: TCP
+    nodePort: 80
+  - name: https
+    port: 443
+    targetPort: 443
+    protocol: TCP
+    nodePort: 443
+  selector:
+    app: ingress-nginx
