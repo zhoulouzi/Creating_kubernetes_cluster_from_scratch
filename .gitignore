@@ -1,4 +1,5 @@
-/binaries
+/binaries/kubelet
+/binaries/kube-proxy
 /cfssl_certs
 /cfssl_config/api-server.csr
 /cfssl_config/kubelet-*.csr

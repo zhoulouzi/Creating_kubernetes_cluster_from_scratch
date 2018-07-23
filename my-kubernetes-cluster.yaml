@@ -9,7 +9,7 @@
   roles:
     - kubernetes
 
-# - hosts: node
-#   gather_facts: no 
-#   roles:
-#     - kubernetes
+- hosts: node
+  gather_facts: no 
+  roles:
+    - kubernetes
