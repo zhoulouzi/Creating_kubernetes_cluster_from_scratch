@@ -16,7 +16,7 @@ This project is helping you to creating a HA kubernetes cluster step by step.
 | kube-scheduler| 1.11.0 | kubelet/docker  |
 
 **Arch：**
-![arch ](http://opiq5jspn.bkt.clouddn.com/337FFB6A-2031-458D-BC55-83AF3B3342A5.png)
+![arch ](https://res.cloudinary.com/ddvxfzzbe/image/upload/v1543227461/kuberetes%E6%9E%B6%E6%9E%84%E5%9B%BE_uimtft.png)
 **Docs:**
 [Creating a Custom Cluster from Scratch](https://kubernetes.io/docs/setup/scratch/)
 [docker install official document](https://docs.docker.com/install/linux/docker-ce/ubuntu/)
