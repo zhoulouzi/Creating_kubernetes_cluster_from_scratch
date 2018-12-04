@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cloudflare-api-key
+  namespace: kube-system
+data:
+   # echo -n "password" | base64
+   api: xxx
