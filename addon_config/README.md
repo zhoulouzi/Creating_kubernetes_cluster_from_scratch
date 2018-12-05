@@ -4,4 +4,4 @@
     1.helm 
     2.manual
 
-There will provides custom values.yaml in helm dir, whole custom kubernetes api yaml in manual dir.
+There will provides custom values.yaml in helm dir, whole custom kubernetes yaml in manual dir.

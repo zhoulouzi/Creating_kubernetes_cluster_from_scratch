@@ -19,6 +19,15 @@ spec:
     - --authorization-mode=Node,RBAC
     - --service-node-port-range=0-65535
     - --token-auth-file=/srv/kubernetes/token-auth-file
+    # Start Configure the Aggregation Layer
+    - --requestheader-client-ca-file=/srv/kubernetes/ca.pem
+    - --requestheader-allowed-names=
+    - --requestheader-extra-headers-prefix=X-Remote-Extra-
+    - --requestheader-group-headers=X-Remote-Group
+    - --requestheader-username-headers=X-Remote-User
+    - --proxy-client-cert-file=/srv/kubernetes/api-server.pem
+    - --proxy-client-key-file=/srv/kubernetes/api-server-key.pem
+    # End Configure the Aggregation Layer
     image: k8s.gcr.io/kube-apiserver:v1.11.0
     livenessProbe:
       failureThreshold: 3
