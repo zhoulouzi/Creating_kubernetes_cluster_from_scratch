@@ -19,7 +19,7 @@ spec:
     - --master=127.0.0.1:8080
     - --cluster-signing-cert-file=/srv/kubernetes/ca.pem
     - --cluster-signing-key-file=/srv/kubernetes/ca-key.pem
-    image: k8s.gcr.io/kube-controller-manager:v1.11.0
+    image: k8s.gcr.io/kube-controller-manager:v1.12.3
     livenessProbe:
       failureThreshold: 3
       httpGet:

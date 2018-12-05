@@ -14,7 +14,7 @@ spec:
   - command:
     - kube-scheduler
     - --master=127.0.0.1:8080
-    image: k8s.gcr.io/kube-scheduler:v1.11.0
+    image: k8s.gcr.io/kube-scheduler:v1.12.3
     livenessProbe:
       failureThreshold: 3
       httpGet:

@@ -28,7 +28,7 @@ spec:
     - --proxy-client-cert-file=/srv/kubernetes/api-server.pem
     - --proxy-client-key-file=/srv/kubernetes/api-server-key.pem
     # End Configure the Aggregation Layer
-    image: k8s.gcr.io/kube-apiserver:v1.11.0
+    image: k8s.gcr.io/kube-apiserver:v1.12.3
     livenessProbe:
       failureThreshold: 3
       httpGet:
