@@ -8,6 +8,7 @@ ExecStart=/usr/local/bin/kubelet \
             --kubeconfig={{ KUBELET_KUBECONFIG_PATH }} \
             --pod-manifest-path={{ KUBELET_POD_MANIFEST_PATH }} \
             --cluster-dns=10.96.0.10 \
+            --cluster-domain=cluster.local \
             --hostname-override={{ inventory_hostname }} \
             --node-ip={{ ansible_host }} \
             --network-plugin=cni
