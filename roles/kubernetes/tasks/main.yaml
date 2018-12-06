@@ -62,6 +62,7 @@
     - {filename: 'master-component/kube-apiserver.yaml.template', destpath: 'kubelet/manifests/kube-apiserver.yaml'}
     - {filename: 'master-component/kube-controller.yaml.template', destpath: 'kubelet/manifests/kube-controller.yaml'}
     - {filename: 'master-component/kube-scheduler.yaml.template', destpath: 'kubelet/manifests/kube-scheduler.yaml'}
+    - {filename: 'audit-policy.yaml', destpath: 'certs/audit-policy.yaml'}
   when: inventory_hostname in groups['master']
 
 - name: copy kubelet binary

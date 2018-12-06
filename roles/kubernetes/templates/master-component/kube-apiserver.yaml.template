@@ -28,6 +28,15 @@ spec:
     - --proxy-client-cert-file=/srv/kubernetes/api-server.pem
     - --proxy-client-key-file=/srv/kubernetes/api-server-key.pem
     # End Configure the Aggregation Layer
+    # Start Config Audit
+    - --audit-log-path=/var/log/kube-audit 
+    - --audit-log-format=json
+    - --audit-log-maxage=7
+    - --audit-log-maxbackup=5
+    - --audit-log-maxsize=100
+    - --audit-log-mode=batch
+    - --audit-policy-file=/srv/kubernetes/audit-policy.yaml
+    # End Config Audit
     image: k8s.gcr.io/kube-apiserver:v1.12.3
     livenessProbe:
       failureThreshold: 3
@@ -48,6 +57,8 @@ spec:
     - mountPath: /etc/ssl
       name: host-cert-folder
       readOnly: true
+    - mountPath: /var/log
+      name: host-var-log
   hostNetwork: true
   volumes:
   - hostPath:
@@ -58,3 +69,7 @@ spec:
       path: /etc/ssl
       type: ""
     name: host-cert-folder
+  - hostPath:
+      path: /var/log
+      type: "
+    name: host-var-log
