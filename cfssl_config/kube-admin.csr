@@ -9,7 +9,7 @@
             "C": "CN",
             "L": "BJ",
             "ST": "BJ",
-            "OU": "kubernetes",
+            "OU": "kubernetes cluster admin",
             "O": "system:masters"
         }
     ]

@@ -1,5 +1,4 @@
 ---
-
 - name: create basic directory
   file:
     path: "{{ item }}"
@@ -11,7 +10,17 @@
     - "{{ CLUSTER_DATA_PATH }}/etcd/"
     - "{{ CLUSTER_DATA_PATH }}/kubelet/"
     - "{{ CLUSTER_DATA_PATH }}/kube-proxy/"
+
+- name: create basic directory master only
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0755
+  loop:
     - "{{ CLUSTER_DATA_PATH }}/kubelet/manifests/"
+    - "{{ CLUSTER_DATA_PATH }}/kube-scheduler/"
+    - "{{ CLUSTER_DATA_PATH }}/kube-controller-manager/"
+  when: inventory_hostname in groups['master']
 
 - name: add apiserever hostname into hosts
   lineinfile:
@@ -43,8 +52,24 @@
     - { filename: 'api-server.pem', destpath: 'certs/api-server.pem', mode: '0644'}
     - { filename: 'api-server-key.pem', destpath: 'certs/api-server-key.pem', mode: '0600'}
     - { filename: 'token-auth-file', destpath: 'certs/token-auth-file', mode: '0644'}
+    - { filename: 'service-accounts.pem', destpath: 'certs/service-accounts.pem', mode: '0644'}
+    - { filename: 'service-accounts-key.pem', destpath: 'certs/service-accounts-key.pem', mode: '0644'}
+    - { filename: 'front-proxy-client.pem', destpath: 'certs/front-proxy-client.pem', mode: '0644'}
+    - { filename: 'front-proxy-client-key.pem', destpath: 'certs/front-proxy-client-key.pem', mode: '0644'}
+    - { filename: 'kubernetes-front-proxy-ca.pem', destpath: 'certs/kubernetes-front-proxy-ca.pem', mode: '0644'}
   when: inventory_hostname in groups['master']
-  
+
+- name: copy kubeconfig file about master
+  copy:
+    src: "./kubeconfig/{{ item.filename }}"
+    dest: "{{ CLUSTER_DATA_PATH }}/{{ item.destpath }}"
+    owner: root
+    group: root
+    mode: "{{ item.mode }}"
+  loop:
+    - { filename: 'kube-controller-manager.kubeconfig', destpath: 'kube-controller-manager/kube-controller-manager.kubeconfig', mode: '0644'}
+    - { filename: 'kube-scheduler.kubeconfig', destpath: 'kube-scheduler/kube-scheduler.kubeconfig', mode: '0644'}
+
 - name: copy ca cert to the host additiinal CA Certs
   copy:
     src: "{{ CLUSTER_DATA_PATH }}/certs/ca.pem" 

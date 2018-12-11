@@ -8,6 +8,8 @@ spec:
   - command:
     - kube-apiserver
     - --allow-privileged=true
+    # default advertise-address is the value of bind-address, if bind-address is unspecified,the host deafult interface address will be used.
+    - --advertise-address={{ansible_host}} 
     - --bind-address={{ ansible_host }}
     - --service-cluster-ip-range=10.96.0.0/12
     - --etcd-servers={% for host in groups['master'] %}http://{{ hostvars[host]['ansible_host'] }}:2379{% if not loop.last %},{% endif %}{% endfor %}
@@ -15,18 +17,22 @@ spec:
     - --client-ca-file=/srv/kubernetes/ca.pem
     - --tls-cert-file=/srv/kubernetes/api-server.pem
     - --tls-private-key-file=/srv/kubernetes/api-server-key.pem
+    - --service-account-key-file=/srv/kubernetes/service-accounts-key.pem
+    - --service-account-signing-key-file
     - --admission-control=Initializers,NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,DefaultTolerationSeconds,NodeRestriction,ResourceQuota
     - --authorization-mode=Node,RBAC
     - --service-node-port-range=0-65535
+    #TODO Diff with kubeadm,Use Token authentication file instead of Bootstrap Tokens for kubelet-tls-bootstrapping.
+    #- --enable-bootstrap-token-auth=true
     - --token-auth-file=/srv/kubernetes/token-auth-file
     # Start Configure the Aggregation Layer
-    - --requestheader-client-ca-file=/srv/kubernetes/ca.pem
-    - --requestheader-allowed-names=
+    - --requestheader-client-ca-file=/srv/kubernetes/kubernetes-front-proxy-ca.pem
+    - --requestheader-allowed-names=front-proxy-client
     - --requestheader-extra-headers-prefix=X-Remote-Extra-
     - --requestheader-group-headers=X-Remote-Group
     - --requestheader-username-headers=X-Remote-User
-    - --proxy-client-cert-file=/srv/kubernetes/api-server.pem
-    - --proxy-client-key-file=/srv/kubernetes/api-server-key.pem
+    - --proxy-client-cert-file=/srv/kubernetes/front-proxy-client.pem
+    - --proxy-client-key-file=/srv/kubernetes/front-proxy-client-key.pem
     # End Configure the Aggregation Layer
     # Start Config Audit
     - --audit-log-path=/var/log/kube-audit 

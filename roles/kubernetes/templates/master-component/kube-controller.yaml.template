@@ -13,12 +13,19 @@ spec:
   containers:
   - command:
     - kube-controller-manager
+    - --address=127.0.0.1
+    - --leader-elect=true
+    - --kubeconfig=/etc/kube-controller-manager/kube-controller-manager.conf
     - --cluster-cidr={{ CLUSTER_CIDR }}
     - --root-ca-file=/srv/kubernetes/ca.pem
-    - --service-account-private-key-file=/srv/kubernetes/api-server-key.pem
-    - --master=127.0.0.1:8080
+    - --service-account-private-key-file=/srv/kubernetes/service-accounts-key.pem
     - --cluster-signing-cert-file=/srv/kubernetes/ca.pem
     - --cluster-signing-key-file=/srv/kubernetes/ca-key.pem
+    - --experimental-cluster-signing-duration=876000h0m0s
+    # Using a separate service account for each control loop.
+    - --use-service-account-credentials=true
+    #TODO Diff with kubeadm,Use Token authentication file instead of Bootstrap Tokens for kubelet-tls-bootstrapping.
+    #- --controllers=*,bootstrapsigner,tokencleaner
     image: k8s.gcr.io/kube-controller-manager:v1.12.3
     livenessProbe:
       failureThreshold: 3
@@ -36,6 +43,9 @@ spec:
     - mountPath: /srv/kubernetes
       name: srvkube
       readOnly: true
+    - mountPath: /etc/kube-controller-manager
+      name: kube-controller-manager-configdir
+      readOnly: true
     - mountPath: /etc/ssl
       name: host-cert-folder
       readOnly: true
@@ -45,6 +55,10 @@ spec:
       path: {{ CLUSTER_DATA_PATH }}/certs/
       type: ""
     name: srvkube
+  - hostPath:
+      path: {{ CLUSTER_DATA_PATH}}/kube-controller-manager/
+      type: ""
+    name: kube-controller-manager-configdir
   - hostPath:
       path: /etc/ssl
       type: ""

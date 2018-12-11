@@ -1,5 +1,5 @@
 {
-  "CN": "system:kube-proxy",
+  "CN": "front-proxy-client",
   "key": {
     "algo": "rsa",
     "size": 2048
@@ -9,8 +9,8 @@
             "C": "CN",
             "L": "BJ",
             "ST": "BJ",
-            "O": "system:node-proxier",
-	          "OU": "kubernetes kube-proxy"
+            "O": "front-proxy-client",
+            "OU": "front-proxy-client"
         }
     ]
 }

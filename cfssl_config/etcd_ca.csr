@@ -1,5 +1,5 @@
 {
-    "CN": "kubernetes",
+    "CN": "Etcd CA",
     "key": {
         "algo": "rsa",
         "size": 2048
@@ -9,8 +9,8 @@
             "C": "CN",
             "L": "BJ",
             "ST": "BJ",
-            "O": "kubernetes",
-	        "OU": "kubernetes"
+            "O": "Etcd CA",
+	        "OU": "Etcd CA"
         }
     ]
 }

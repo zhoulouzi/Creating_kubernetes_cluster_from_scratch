@@ -19,7 +19,8 @@
             "C": "CN",
             "L": "BJ",
             "ST": "BJ",
-	          "OU": "kubernetes"
+	          "OU": "kubernetes",
+            "O": "Kubernetes apiserver"
         }
       ]
 }

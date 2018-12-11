@@ -13,7 +13,9 @@ spec:
   containers:
   - command:
     - kube-scheduler
-    - --master=127.0.0.1:8080
+    - --address=127.0.0.1
+    - --kubeconfig=/etc/kube-scheduler/kube-scheduler.kubeconfig
+    - --leader-elect=true
     image: k8s.gcr.io/kube-scheduler:v1.12.3
     livenessProbe:
       failureThreshold: 3
@@ -27,4 +29,14 @@ spec:
       successThreshold: 1
       timeoutSeconds: 15
     name: kube-scheduler
+    volumeMounts:
+    - mountPath: /etc/kube-scheduler
+      name: kube-scheduler-configdir
+      readOnly: true
   hostNetwork: true
+  volumes:
+  - hostPath:
+      path: {{ CLUSTER_DATA_PATH}}/kube-scheduler/
+      type: ""
+    name: kube-controller-manager-configdir
+
