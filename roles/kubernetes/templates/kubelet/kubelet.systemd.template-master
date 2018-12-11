@@ -6,12 +6,6 @@ After=network.target
 [Service]
 ExecStart=/usr/local/bin/kubelet \
             --kubeconfig={{ KUBELET_KUBECONFIG_PATH }} \
-#TODO  Wait until GA (use ca sign expiry 876000h)
-#            --rotate-certificates \
-#            --rotate-server-certificates \
-#TODO same with kubelet client config?
-#            --tls-cert-file= \
-#            --tls-private-key-file= \
             --pod-manifest-path={{ KUBELET_POD_MANIFEST_PATH }} \
             --cluster-dns=10.96.0.10 \
             --cluster-domain=cluster.local \

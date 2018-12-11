@@ -38,8 +38,8 @@
     group: root
     mode: "{{ item.mode }}"
   loop:
-    - { filename: 'ca.pem', destpath: 'certs/ca.pem', mode: '0644'}
-    - { filename: 'ca-key.pem', destpath: 'certs/ca-key.pem', mode: '0600'}
+    - { filename: 'kubernetes-ca.pem', destpath: 'certs/ca.pem', mode: '0644'}
+    - { filename: 'kubernetes-ca-key.pem', destpath: 'certs/ca-key.pem', mode: '0600'}
 
 - name: copy keys and secret file about master
   copy:

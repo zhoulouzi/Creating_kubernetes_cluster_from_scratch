@@ -17,8 +17,6 @@ spec:
     - --client-ca-file=/srv/kubernetes/ca.pem
     - --tls-cert-file=/srv/kubernetes/api-server.pem
     - --tls-private-key-file=/srv/kubernetes/api-server-key.pem
-    - --service-account-key-file=/srv/kubernetes/service-accounts-key.pem
-    - --service-account-signing-key-file
     - --admission-control=Initializers,NamespaceLifecycle,LimitRanger,ServiceAccount,PersistentVolumeLabel,DefaultStorageClass,DefaultTolerationSeconds,NodeRestriction,ResourceQuota
     - --authorization-mode=Node,RBAC
     - --service-node-port-range=0-65535
@@ -77,5 +75,5 @@ spec:
     name: host-cert-folder
   - hostPath:
       path: /var/log
-      type: "
+      type: ""
     name: host-var-log

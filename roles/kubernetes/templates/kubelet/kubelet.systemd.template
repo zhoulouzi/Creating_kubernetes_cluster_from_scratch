@@ -7,13 +7,7 @@ After=network.target
 ExecStart=/usr/local/bin/kubelet \
             --bootstrap-kubeconfig={{ KUBELET_BOOTSTRAPPING_KUBECONFIG_PATH }}  \
             --kubeconfig={{ KUBELET_KUBECONFIG_PATH }} \
-#TODO  Wait until GA (use ca sign expiry 876000h)          
-#            --rotate-certificates \
-#            --rotate-server-certificates \
-#TODO same with kubelet client config?   thas mertics-server use --kubelet-insecure-tls to avoide selfsign certs
-#            --tls-cert-file= \
-#            --tls-private-key-file= \
-            --cert-dir={{ CLUSTER_DATA_PATH }}/certs/
+            --cert-dir={{ CLUSTER_DATA_PATH }}/certs/ \
             --pod-manifest-path={{ KUBELET_POD_MANIFEST_PATH }} \
             --cluster-dns=10.96.0.10 \
             --cluster-domain=cluster.local \
