@@ -41,7 +41,7 @@ spec:
     - --audit-log-mode=batch
     - --audit-policy-file=/srv/kubernetes/audit-policy.yaml
     # End Config Audit
-    image: k8s.gcr.io/kube-apiserver:v1.12.3
+    image: k8s.gcr.io/kube-apiserver:v1.13.0
     livenessProbe:
       failureThreshold: 3
       httpGet:

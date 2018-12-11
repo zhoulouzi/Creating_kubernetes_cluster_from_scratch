@@ -26,7 +26,7 @@ spec:
     - --use-service-account-credentials=true
     #TODO Diff with kubeadm,Use Token authentication file instead of Bootstrap Tokens for kubelet-tls-bootstrapping.
     #- --controllers=*,bootstrapsigner,tokencleaner
-    image: k8s.gcr.io/kube-controller-manager:v1.12.3
+    image: k8s.gcr.io/kube-controller-manager:v1.13.0
     livenessProbe:
       failureThreshold: 3
       httpGet:
