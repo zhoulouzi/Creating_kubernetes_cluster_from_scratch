@@ -1,0 +1,16 @@
+{
+  "CN": "kube-apiserver-kubelet-client",
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "CN",
+      "L": "BJ",
+      "ST": "BJ",
+      "O": "system:masters",
+      "OU": "kubernetes"
+    }
+  ]
+}

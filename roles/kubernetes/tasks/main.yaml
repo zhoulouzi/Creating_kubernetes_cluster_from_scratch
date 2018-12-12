@@ -57,6 +57,8 @@
     - { filename: 'front-proxy-client.pem', destpath: 'certs/front-proxy-client.pem', mode: '0644'}
     - { filename: 'front-proxy-client-key.pem', destpath: 'certs/front-proxy-client-key.pem', mode: '0644'}
     - { filename: 'kubernetes-front-proxy-ca.pem', destpath: 'certs/kubernetes-front-proxy-ca.pem', mode: '0644'}
+    - { filename: 'apiserver-kubelet-client.pem', destpath: 'certs/apiserver-kubelet-client.pem', mode: '0644'}
+    - { filename: 'apiserver-kubelet-client-key.pem', destpath: 'certs/apiserver-kubelet-client-key.pem', mode: '0644'}
   when: inventory_hostname in groups['master']
 
 - name: copy kubeconfig file about master

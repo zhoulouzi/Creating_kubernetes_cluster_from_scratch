@@ -95,6 +95,14 @@ else
     $CFSSL_BIN gencert -ca=$KUBERNETES_CA_CERT -ca-key=$KUBERNETES_CA_KEY --config=$CA_CONFIG -profile=kubernetes ./cfssl_config/api-server.csr | $CFSSLJSON_BIN -bare $CERTS_DIR/api-server
 fi
 
+# api-server kubelet-client key pair sign by Kubernetes CA
+if [ -e $CERTS_DIR/apiserver-kubelet-client.pem ] && [ -e $CERTS_DIR/apiserver-kubelet-client-key.pem ];then
+    echo "apiserver-kubelet-client key pair has already been generate"
+else
+    echo "Generate the apiserver-kubelet-client key pair"
+    $CFSSL_BIN gencert -ca=$KUBERNETES_CA_CERT -ca-key=$KUBERNETES_CA_KEY --config=$CA_CONFIG -profile=kubernetes ./cfssl_config/apiserver-kubelet-client.csr | $CFSSLJSON_BIN -bare $CERTS_DIR/apiserver-kubelet-client
+fi
+
 ## kube-controller-manager certs sign by Kubernetes CA
 if [ -e $CERTS_DIR/kube-controller-manager.pem ] && [ -e $CERTS_DIR/kube-controller-manager-key.pem ];then
     echo "kube-controller-manager key pair has already been generate"

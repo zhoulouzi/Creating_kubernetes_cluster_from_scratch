@@ -17,6 +17,8 @@ spec:
     - --client-ca-file=/srv/kubernetes/ca.pem
     - --tls-cert-file=/srv/kubernetes/api-server.pem
     - --tls-private-key-file=/srv/kubernetes/api-server-key.pem
+    - --kubelet-client-certificate=/srv/kubernetes/apiserver-kubelet-client.pem
+    - --kubelet-client-key=/srv/kubernetes/apiserver-kubelet-client-key.pem
     - --service-account-key-file=/srv/kubernetes/service-accounts.pem
     - --service-account-signing-key-file=/srv/kubernetes/service-accounts-key.pem
     - --service-account-issuer=apiserver
