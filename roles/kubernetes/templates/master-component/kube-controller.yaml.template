@@ -13,7 +13,7 @@ spec:
   containers:
   - command:
     - kube-controller-manager
-    - --address=127.0.0.1
+    - --bind-address=127.0.0.1
     - --leader-elect=true
     - --kubeconfig=/etc/kube-controller-manager/kube-controller-manager.kubeconfig
     - --cluster-cidr={{ CLUSTER_CIDR }}
@@ -23,7 +23,7 @@ spec:
     - --cluster-signing-key-file=/srv/kubernetes/ca-key.pem
     - --experimental-cluster-signing-duration=876000h0m0s
     # Using a separate service account for each control loop.
-    - --use-service-account-credentials=true
+    #- --use-service-account-credentials=true
     #TODO Diff with kubeadm,Use Token authentication file instead of Bootstrap Tokens for kubelet-tls-bootstrapping.
     #- --controllers=*,bootstrapsigner,tokencleaner
     image: k8s.gcr.io/kube-controller-manager:v1.13.0

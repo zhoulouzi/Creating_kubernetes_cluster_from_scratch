@@ -13,7 +13,7 @@ spec:
   containers:
   - command:
     - kube-scheduler
-    - --address=127.0.0.1
+    - --bind-address=127.0.0.1
     - --kubeconfig=/etc/kube-scheduler/kube-scheduler.kubeconfig
     - --leader-elect=true
     image: k8s.gcr.io/kube-scheduler:v1.13.0
@@ -38,5 +38,5 @@ spec:
   - hostPath:
       path: {{ CLUSTER_DATA_PATH}}/kube-scheduler/
       type: ""
-    name: kube-controller-manager-configdir
+    name: kube-scheduler-configdir
 
