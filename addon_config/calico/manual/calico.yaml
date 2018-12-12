@@ -13,7 +13,7 @@ metadata:
   namespace: kube-system
 data:
   # Configure this with the location of your etcd cluster.
-  etcd_endpoints: "http://103.210.239.100:2379"
+  etcd_endpoints: "http://192.168.1.1:2379"
 
   # If you're using TLS enabled etcd uncomment the following.
   # You must also populate the Secret below with these files.
