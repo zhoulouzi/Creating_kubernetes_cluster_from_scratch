@@ -7,13 +7,13 @@ This project is helping you to creating a HA kubernetes cluster step by step.
 
 |  | version | service management |
 | :--- | :----: | ----: |
-| docker | 17.03.2 | systemd |
-| kubelet | 1.11.0 | systemd |
-| kube-proxy | 1.11.0 | systemd |
-| etcd | 3.2.18 | kubelet/docker |
-| kube-apiserver | 1.11.0 | kubelet/docker |
-| kube-controller-manager | 1.11.0 | kubelet/docker  |
-| kube-scheduler| 1.11.0 | kubelet/docker  |
+| docker | 18.06.1-ce| systemd |
+| kubelet |  v1.13.0 | systemd |
+| kube-proxy |  v1.13.0 | systemd |
+| etcd | 3.2.24 | kubelet/docker |
+| kube-apiserver | v1.13.0 | kubelet/docker |
+| kube-controller-manager | v1.13.0 | kubelet/docker  |
+| kube-scheduler| v1.13.0 | kubelet/docker  |
 
 **Arch：**
 ![arch ](https://res.cloudinary.com/ddvxfzzbe/image/upload/v1543227461/kuberetes%E6%9E%B6%E6%9E%84%E5%9B%BE_uimtft.png)
