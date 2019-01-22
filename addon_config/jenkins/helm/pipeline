@@ -1,0 +1,34 @@
+def label = "jenkins-worker-${UUID.randomUUID().toString()}"
+podTemplate(label: 'golang-pod',  containers: [
+    containerTemplate(
+            name: 'golang',
+            image: 'registry.cn-hangzhou.aliyuncs.com/spacexnice/golang:1.8.3-docker',
+            ttyEnabled: true,
+            command: 'cat'
+        ),
+    containerTemplate(
+            name: 'jnlp',
+            image: 'jenkins/jnlp-slave:3.27-1',
+            args: '${computer.jnlpmac} ${computer.name}'
+        )
+  ]
+  ,volumes: [
+        /*persistentVolumeClaim(mountPath: '/home/jenkins', claimName: 'jenkins', readOnly: false),*/
+        // hostPathVolume(hostPath: '/root/work/jenkins', mountPath: '/home/jenkins'),
+        hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
+        hostPathVolume(hostPath: '/tmp/', mountPath: '/tmp/'),
+]) 
+{
+    node (label) {
+        
+        container('golang') {
+            git url: 'https://github.com/spacexnice/blog.git' , branch: 'code'
+            
+            stage('Build blog project') {
+                
+                sh("make")
+        
+            }
+        }
+    }
+}

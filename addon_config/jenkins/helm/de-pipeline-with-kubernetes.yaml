@@ -1,0 +1,34 @@
+pipeline {
+  agent {
+    kubernetes {
+      label 'mypod'
+      defaultContainer 'jnlp'
+      yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: jenkins-slave
+spec:
+  containers:
+  - name: jnlp
+    image: jenkins/jnlp-slave:3.27-1
+    args: ['\$(JENKINS_SECRET)', '\$(JENKINS_NAME)']
+  - name: golang
+    image: registry.cn-hangzhou.aliyuncs.com/spacexnice/golang:1.8.3-docker
+    command:
+    - cat
+    tty: true
+"""
+    }
+  }
+  stages {
+    stage('Run goland') {
+      steps {
+        container('golang') {
+          sh 'go version'
+        }
+      }
+    }
+  }
+}

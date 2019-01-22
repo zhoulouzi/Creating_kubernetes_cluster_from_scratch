@@ -1,0 +1,66 @@
+pipeline {
+    /* insert Declarative Pipeline here */
+    agent any
+    agent none
+    agent { label 'my-defined-label' }
+    agent {
+        docker {
+            image 'maven:3-alpine'
+            label 'my-defined-label'
+            args  '-v /tmp:/tmp'
+        }
+    }
+    agent {
+        docker {
+            image 'myregistry.com/node'
+            label 'my-defined-label'
+            registryUrl 'https://myregistry.com/'
+            registryCredentialsId 'myPredefinedCredentialsInJenkins'
+        }
+    }
+    agent {
+        // Equivalent to "docker build -f Dockerfile.build --build-arg version=1.0.2 ./build/
+        dockerfile {
+            filename 'Dockerfile.build'
+            dir 'build'
+            label 'my-defined-label'
+            additionalBuildArgs  '--build-arg version=1.0.2'
+            args '-v /tmp:/tmp'
+        }
+    }
+    triggers { 
+        cron('H */4 * * 1-5')
+        pollSCM('H */4 * * 1-5')
+    }
+    environment {
+        CC = 'clang'
+    }
+    options {
+        timeout(time: 1, unit: 'HOURS') 
+    }
+    stages {
+        stage('Example') {
+            input {
+                message "Should we continue?"
+                ok "Yes, we should."
+                parameters {
+                    string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
+                }
+            }
+            when { branch 'master' }
+            when { tag "release-*" }
+            agent { docker 'maven:3-alpine' }
+            environment { 
+                AN_ACCESS_KEY = credentials('my-prefined-secret-text') 
+            }
+            options {
+                timeout(time: 1, unit: 'HOURS') 
+            }
+            steps {
+                echo 'Hello World'
+            }
+        }
+    }
+
+
+}
